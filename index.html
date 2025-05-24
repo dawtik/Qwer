@@ -1,0 +1,56 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Orthmon Offline</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; background: #f0f0f0; margin: 0; padding: 20px; }
+    h1 { margin-bottom: 10px; }
+    .monster { border: 1px solid #444; padding: 10px; margin: 10px auto; background: white; width: 250px; }
+    button { margin-top: 10px; padding: 8px 16px; }
+  </style>
+</head>
+<body>
+  <h1>Orthmon Offline</h1>
+  <p>Добро пожаловать! Выберите стартового монстра:</p>
+  <div id="starter-options"></div>
+
+  <script>
+    const starters = [
+      { name: "Атия", type: "Огонь", hp: 80, level: 5, attacks: ["Огненный шар", "Царапина"] },
+      { name: "Глаймор", type: "Вода", hp: 85, level: 5, attacks: ["Водяной плеск", "Хвост"] },
+      { name: "Террокс", type: "Земля", hp: 90, level: 5, attacks: ["Удар по земле", "Царапина"] }
+    ];
+
+    function chooseStarter(index) {
+      const monster = starters[index];
+      localStorage.setItem("starter", JSON.stringify(monster));
+      alert("Вы выбрали " + monster.name + "! Игра сохранена.");
+      location.reload();
+    }
+
+    function showStarterOptions() {
+      const container = document.getElementById("starter-options");
+      starters.forEach((m, i) => {
+        const div = document.createElement("div");
+        div.className = "monster";
+        div.innerHTML = "<strong>" + m.name + "</strong><br>Тип: " + m.type + "<br>HP: " + m.hp +
+          "<br>Атаки: " + m.attacks.join(", ") +
+          "<br><button onclick='chooseStarter(" + i + ")'>Выбрать</button>";
+        container.appendChild(div);
+      });
+    }
+
+    const saved = localStorage.getItem("starter");
+    if (!saved) {
+      showStarterOptions();
+    } else {
+      const monster = JSON.parse(saved);
+      document.body.innerHTML = "<h1>Ваш монстр: " + monster.name + "</h1>" +
+        "<p>Тип: " + monster.type + "</p><p>HP: " + monster.hp + "</p>" +
+        "<p>Уровень: " + monster.level + "</p><p>Атаки: " + monster.attacks.join(", ") + "</p>";
+    }
+  </script>
+</body>
+</html>
